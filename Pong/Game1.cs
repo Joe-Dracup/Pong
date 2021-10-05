@@ -11,7 +11,6 @@ namespace Pong
 
         Texture2D ballTexture;
         Vector2 ballPosition;
-        float ballSpeed;
         private const int _barToEdgePadding = 40;
 
         private Bar _playerBar;
@@ -28,9 +27,6 @@ namespace Pong
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            ballPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
-            ballSpeed = 100f;
-
             base.Initialize();
         }
 
@@ -39,7 +35,6 @@ namespace Pong
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            ballTexture = Content.Load<Texture2D>("ball");
             var barTexture = Content.Load<Texture2D>("PongBar");
 
             _playerBar = new Bar(barTexture, _graphics.PreferredBackBufferHeight, _graphics.PreferredBackBufferWidth - _barToEdgePadding);
@@ -74,18 +69,7 @@ namespace Pong
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            _spriteBatch.Draw(
-                ballTexture,
-                ballPosition,
-                null,
-                Color.White,
-                0f,
-                new Vector2(ballTexture.Width / 2, ballTexture.Height / 2),
-                Vector2.One,
-                SpriteEffects.None,
-                0f
-            );
-
+            
             _spriteBatch.Draw(_playerBar.GetTexture(), new Rectangle(_playerBar.GetXPos(), _playerBar.GetYPos(), Bar.Width, Bar.Height), Color.White);
             _spriteBatch.Draw(_cpuBar.GetTexture(), new Rectangle(_cpuBar.GetXPos(), _cpuBar.GetYPos(), Bar.Width, Bar.Height), Color.White);
 
