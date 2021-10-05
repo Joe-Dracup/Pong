@@ -9,12 +9,13 @@ namespace Pong
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        Texture2D ballTexture;
-        Vector2 ballPosition;
-        private const int _barToEdgePadding = 40;
-
         private Bar _playerBar;
         private Bar _cpuBar;
+        private Ball _ball;
+
+        private int _height;
+        private int _width;
+        private const int _barToEdgePadding = 40;
 
 
         public Game1()
@@ -22,6 +23,9 @@ namespace Pong
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
+            _height = _graphics.PreferredBackBufferHeight;
+            _width = _graphics.PreferredBackBufferWidth;
         }
 
         protected override void Initialize()
@@ -34,11 +38,14 @@ namespace Pong
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            //Textures
             var barTexture = Content.Load<Texture2D>("PongBar");
+            var ballTexture = Content.Load<Texture2D>("PongBall");
 
-            _playerBar = new Bar(barTexture, _graphics.PreferredBackBufferHeight, _graphics.PreferredBackBufferWidth - _barToEdgePadding);
-            _cpuBar = new Bar(barTexture, _graphics.PreferredBackBufferHeight, _barToEdgePadding);
+            _ball = new Ball(ballTexture, _width / 2, _height, _width);
+
+            _playerBar = new Bar(barTexture, _height, _width - _barToEdgePadding);
+            _cpuBar = new Bar(barTexture, _height, _barToEdgePadding);
         }
 
         protected override void Update(GameTime gameTime)
@@ -58,6 +65,8 @@ namespace Pong
                 _playerBar.MoveDown();
             }
 
+            _ball.Move();
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -69,9 +78,10 @@ namespace Pong
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            
+
             _spriteBatch.Draw(_playerBar.GetTexture(), new Rectangle(_playerBar.GetXPos(), _playerBar.GetYPos(), Bar.Width, Bar.Height), Color.White);
             _spriteBatch.Draw(_cpuBar.GetTexture(), new Rectangle(_cpuBar.GetXPos(), _cpuBar.GetYPos(), Bar.Width, Bar.Height), Color.White);
+            _spriteBatch.Draw(_ball.GetTexture(), new Rectangle(_ball.GetXPos(), _ball.GetYPos(), 10, 10), Color.White);
 
             _spriteBatch.End();
 
