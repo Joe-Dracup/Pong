@@ -6,12 +6,17 @@ namespace Pong
 {
     public class Game1 : Game
     {
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+
         Texture2D ballTexture;
         Vector2 ballPosition;
         float ballSpeed;
+        private const int _barToEdgePadding = 40;
 
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        private Bar _playerBar;
+        private Bar _cpuBar;
+
 
         public Game1()
         {
@@ -35,6 +40,10 @@ namespace Pong
 
             // TODO: use this.Content to load your game content here
             ballTexture = Content.Load<Texture2D>("ball");
+            var barTexture = Content.Load<Texture2D>("PongBar");
+
+            _playerBar = new Bar(barTexture, _graphics.PreferredBackBufferHeight, _graphics.PreferredBackBufferWidth - _barToEdgePadding);
+            _cpuBar = new Bar(barTexture, _graphics.PreferredBackBufferHeight, _barToEdgePadding);
         }
 
         protected override void Update(GameTime gameTime)
@@ -45,22 +54,14 @@ namespace Pong
             var kstate = Keyboard.GetState();
 
             if (kstate.IsKeyDown(Keys.Up))
-                ballPosition.Y -= ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            {
+                _playerBar.MoveUp();
+            }
 
             if (kstate.IsKeyDown(Keys.Down))
-                ballPosition.Y += ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            
-            if (kstate.IsKeyDown(Keys.Left))
-                ballPosition.X -= ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (kstate.IsKeyDown(Keys.Right))
-                ballPosition.X += ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (ballPosition.Y > _graphics.PreferredBackBufferHeight - ballTexture.Height / 2)
-                ballPosition.Y = _graphics.PreferredBackBufferHeight - ballTexture.Height / 2;
-            else if (ballPosition.Y < ballTexture.Height / 2)
-                ballPosition.Y = ballTexture.Height / 2;
-
+            {
+                _playerBar.MoveDown();
+            }
 
             // TODO: Add your update logic here
 
@@ -84,6 +85,10 @@ namespace Pong
                 SpriteEffects.None,
                 0f
             );
+
+            _spriteBatch.Draw(_playerBar.GetTexture(), new Rectangle(_playerBar.GetXPos(), _playerBar.GetYPos(), Bar.Width, Bar.Height), Color.White);
+            _spriteBatch.Draw(_cpuBar.GetTexture(), new Rectangle(_cpuBar.GetXPos(), _cpuBar.GetYPos(), Bar.Width, Bar.Height), Color.White);
+
             _spriteBatch.End();
 
             base.Draw(gameTime);
