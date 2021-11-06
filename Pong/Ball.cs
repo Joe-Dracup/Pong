@@ -105,7 +105,7 @@ namespace Pong
         private void UpdateVerticalMovement(Bar bar)
         {
             var diff = _yPos - bar.YCenterOfBar();
-            var off = (diff) / 2;
+            var off = (diff) / 5;
             _verticalMovement = off;
         }
     }
