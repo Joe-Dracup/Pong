@@ -51,5 +51,15 @@ namespace Pong
         {
             return _yPos + Height / 2;
         }
+
+        public int GetBarHeight()
+        {
+            return Height;
+        }
+
+        public int GetBarWidth()
+        {
+            return Width;
+        }
     }
 }

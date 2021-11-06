@@ -42,10 +42,10 @@ namespace Pong
             var barTexture = Content.Load<Texture2D>("PongBar");
             var ballTexture = Content.Load<Texture2D>("PongBall");
 
-            _ball = new Ball(ballTexture, _width / 2, _height, _width);
-
             _playerBar = new Bar(barTexture, _height, _width - _barToEdgePadding);
             _cpuBar = new Bar(barTexture, _height, _barToEdgePadding);
+
+            _ball = new Ball(ballTexture, _width / 2, _height, _width, _playerBar, _cpuBar);
         }
 
         protected override void Update(GameTime gameTime)
@@ -66,6 +66,11 @@ namespace Pong
             }
 
             _ball.Move();
+
+            //if(_ball.GetXPos() > _playerBar.GetXPos())
+            //{
+            //    _ball.
+            //}
 
             // TODO: Add your update logic here
 
